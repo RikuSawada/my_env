@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app/static/pdf:/app/static/pdf
+      - ./backend/app/static/thumbs:/app/static/thumbs
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - frontend
+
+  db:
+    build:
+      context: .
+      dockerfile: ./infra/postgresql/Dockerfile
+    container_name: "appdb"
+    environment:
+      POSTGRES_PASSWORD: postgres  #スーパーユーザ(postgres)のパスワード
+      POSTGRES_USER: postgres      #ユーザアカウント
+      POSTGRES_DB: appdb           #DB名
+      TZ: "Asia/Tokyo"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 15432:5432  #ホストOSの15432をコンテナ内の5432にマッピング
+    volumes:
+      - ./infra/postgresql/volumes:/var/lib/postgresql/data    # ※ホストOSで永続化
+      - ./infra/postgresql/dump:/docker-entrypoint-initdb.d
