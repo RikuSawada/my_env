@@ -1,0 +1,44 @@
+# --- 共通 ---
+*.log
+*.env
+.env.*
+.DS_Store
+Thumbs.db
+node_modules/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.swp
+*.swo
+
+# --- フロントエンド (frontend/) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+frontend/package-lock.json
+
+# TypeScript
+frontend/*.tsbuildinfo
+
+# --- バックエンド (backend/) ---
+backend/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/env/
+backend/.mypy_cache/
+backend/resource/pdf/.gradle
+
+# --- infra ---
+infra/postgresql/volumes
+
+# --- IDE関連 ---
+.vscode/
+.idea/
+*.iml
+
+# --- Docker関連 (任意: ビルド成果物など) ---
+**/docker-compose.override.yml
+**/build/
+**/.docker/
