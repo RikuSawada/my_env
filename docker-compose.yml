@@ -41,3 +41,22 @@ services:
     volumes:
       - ./infra/postgresql/volumes:/var/lib/postgresql/data    # ※ホストOSで永続化
       - ./infra/postgresql/dump:/docker-entrypoint-initdb.d
+
+  backend-test:
+    build: ./backend
+    command: bash -c "PYTHONPATH=/app pytest -q"
+    volumes:
+      - ./backend:/app
+
+  backend-lint:
+    build: ./backend
+    command: bash -c "PYTHONPATH=/app flake8"
+    volumes:
+      - ./backend:/app
+
+  frontend-lint:
+    build:
+      context: ./frontend
+    command: npm run lint
+    volumes:
+      - ./frontend:/app
